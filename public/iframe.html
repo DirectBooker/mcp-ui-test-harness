@@ -1,76 +1,109 @@
-<!DOCTYPE html>
-<html lang="en-US" data-theme="dark" class="dark" style="--safe-area-inset-top: 0px; --safe-area-inset-bottom: 0px; --safe-area-inset-left: 0px; --safe-area-inset-right: 0px;">
-<head>
-  <style>
-    html,body,#root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-    html,body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,Arial,sans-serif!important}
-    button,input,textarea,select{font-family:inherit}
-  </style>
-</head>
-<body>
-  <div id="content">Loading...</div>
-  
-  <script>
-    // Set up global openai object
-    if (!window.openai) {
-      window.openai = {};
-    }
-
-    // Listen for postMessage from parent
-    window.addEventListener('message', function(event) {
-      if (event.data && event.data.type === 'openai:set_globals') {
-        // Update the globals
-        Object.keys(event.data.globals).forEach(key => {
-          window.openai[key] = event.data.globals[key];
-        });
-        
-        // Dispatch custom event for React components
-        const customEvent = new CustomEvent('openai:set_globals', {
-          detail: { globals: event.data.globals }
-        });
-        window.dispatchEvent(customEvent);
+<!doctype html>
+<html
+  lang="en-US"
+  data-theme="dark"
+  class="dark"
+  style="
+    --safe-area-inset-top: 0px;
+    --safe-area-inset-bottom: 0px;
+    --safe-area-inset-left: 0px;
+    --safe-area-inset-right: 0px;
+  "
+>
+  <head>
+    <style>
+      html,
+      body,
+      #root {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
-      
-      if (event.data && event.data.type === 'update_content') {
-        const content = event.data.content;
-        const contentDiv = document.getElementById('content');
-        
-        // Set the HTML content
-        contentDiv.innerHTML = content;
-        
-        // Find and execute any script tags
-        const scripts = contentDiv.querySelectorAll('script');
-        scripts.forEach((oldScript) => {
-          const newScript = document.createElement('script');
-          // Copy all attributes
-          Array.from(oldScript.attributes).forEach(attr => {
-            newScript.setAttribute(attr.name, attr.value);
+      html,
+      body {
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          Segoe UI,
+          Roboto,
+          Oxygen,
+          Ubuntu,
+          Cantarell,
+          Helvetica Neue,
+          Arial,
+          sans-serif !important;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font-family: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">Loading...</div>
+
+    <script>
+      // Set up global openai object
+      if (!window.openai) {
+        window.openai = {};
+      }
+
+      // Listen for postMessage from parent
+      window.addEventListener("message", function (event) {
+        if (event.data && event.data.type === "openai:set_globals") {
+          // Update the globals
+          Object.keys(event.data.globals).forEach(key => {
+            window.openai[key] = event.data.globals[key];
           });
-          // Copy the script content
-          newScript.textContent = oldScript.textContent;
-          
-          // Replace the old script with the new executable one
-          oldScript.parentNode.replaceChild(newScript, oldScript);
-        });
+
+          // Dispatch custom event for React components
+          const customEvent = new CustomEvent("openai:set_globals", {
+            detail: { globals: event.data.globals },
+          });
+          window.dispatchEvent(customEvent);
+        }
+
+        if (event.data && event.data.type === "update_content") {
+          const content = event.data.content;
+          const contentDiv = document.getElementById("content");
+
+          // Set the HTML content
+          contentDiv.innerHTML = content;
+
+          // Find and execute any script tags
+          const scripts = contentDiv.querySelectorAll("script");
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement("script");
+            // Copy all attributes
+            Array.from(oldScript.attributes).forEach(attr => {
+              newScript.setAttribute(attr.name, attr.value);
+            });
+            // Copy the script content
+            newScript.textContent = oldScript.textContent;
+
+            // Replace the old script with the new executable one
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+          });
+        }
+      });
+
+      // Signal to parent that iframe is ready
+      function signalReady() {
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: "iframe:ready" }, "*");
+        }
       }
-    });
 
-    // Signal to parent that iframe is ready
-    function signalReady() {
-      if (window.parent !== window) {
-        window.parent.postMessage({ type: 'iframe:ready' }, '*');
+      // Signal ready when DOM is loaded
+      if (document.readyState === "loading") {
+        window.addEventListener("DOMContentLoaded", signalReady);
+      } else {
+        signalReady();
       }
-    }
 
-    // Signal ready when DOM is loaded
-    if (document.readyState === 'loading') {
-      window.addEventListener('DOMContentLoaded', signalReady);
-    } else {
-      signalReady();
-    }
-
-    // Ensure parent is ready to receive the signal
-    setTimeout(signalReady, 100);
-  </script>
-</body>
+      // Ensure parent is ready to receive the signal
+      setTimeout(signalReady, 100);
+    </script>
+  </body>
 </html>

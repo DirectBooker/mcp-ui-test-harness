@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { MIDDLE_EARTH_HOTELS } from "@/data/hotels";
 
-const SET_GLOBALS_EVENT_TYPE = 'openai:set_globals' as const;
+const SET_GLOBALS_EVENT_TYPE = "openai:set_globals" as const;
 
 export default function Home() {
   const [mcpServerUrl, setMcpServerUrl] = useState("http://localhost:3000/mcp");
@@ -13,19 +13,22 @@ export default function Home() {
   const [loadingTime, setLoadingTime] = useState(0);
   const [error, setError] = useState("");
   const [iframeReady, setIframeReady] = useState(false);
-  const [pendingGlobals, setPendingGlobals] = useState<Record<string, unknown> | null>(null);
+  const [pendingGlobals, setPendingGlobals] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  
+
   // Set up message listener for iframe ready signals
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data && event.data.type === 'iframe:ready') {
+      if (event.data && event.data.type === "iframe:ready") {
         setIframeReady(true);
       }
     };
 
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
   }, []);
 
   // Send pending globals when iframe becomes ready
@@ -34,18 +37,20 @@ export default function Home() {
       const iframe = iframeRef.current;
       if (iframe && iframe.contentWindow) {
         try {
-          iframe.contentWindow.postMessage({
-            type: SET_GLOBALS_EVENT_TYPE,
-            globals: pendingGlobals
-          }, '*');
+          iframe.contentWindow.postMessage(
+            {
+              type: SET_GLOBALS_EVENT_TYPE,
+              globals: pendingGlobals,
+            },
+            "*"
+          );
           setPendingGlobals(null);
         } catch (error) {
-          console.error('Failed to send pending globals:', error);
+          console.error("Failed to send pending globals:", error);
         }
       }
     }
   }, [iframeReady, pendingGlobals]);
-
 
   // Function to set globals and send to iframe via postMessage
   const setIframeGlobals = (globals: Record<string, unknown>) => {
@@ -62,12 +67,15 @@ export default function Home() {
 
     try {
       // Use postMessage to send data to iframe safely
-      iframe.contentWindow.postMessage({
-        type: SET_GLOBALS_EVENT_TYPE,
-        globals
-      }, '*');
+      iframe.contentWindow.postMessage(
+        {
+          type: SET_GLOBALS_EVENT_TYPE,
+          globals,
+        },
+        "*"
+      );
     } catch (error) {
-      console.error('Failed to send globals to iframe:', error);
+      console.error("Failed to send globals to iframe:", error);
     }
   };
 
@@ -79,12 +87,15 @@ export default function Home() {
     }
 
     try {
-      iframe.contentWindow.postMessage({
-        type: 'update_content',
-        content
-      }, '*');
+      iframe.contentWindow.postMessage(
+        {
+          type: "update_content",
+          content,
+        },
+        "*"
+      );
     } catch (error) {
-      console.error('Failed to update iframe content:', error);
+      console.error("Failed to update iframe content:", error);
     }
   };
 
@@ -101,23 +112,23 @@ export default function Home() {
     try {
       // Step 1: Initialize MCP connection
       const initResponse = await fetch(mcpServerUrl, {
-        method: 'POST',
-        mode: 'cors',
+        method: "POST",
+        mode: "cors",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json, text/event-stream',
+          "Content-Type": "application/json",
+          Accept: "application/json, text/event-stream",
         },
         body: JSON.stringify({
-          jsonrpc: '2.0',
-          method: 'initialize',
+          jsonrpc: "2.0",
+          method: "initialize",
           params: {
-            protocolVersion: '2024-11-05',
+            protocolVersion: "2024-11-05",
             capabilities: {
               resources: {},
             },
             clientInfo: {
-              name: 'mcp-harness-client',
-              version: '1.0.0',
+              name: "mcp-harness-client",
+              version: "1.0.0",
             },
           },
           id: 1,
@@ -125,7 +136,9 @@ export default function Home() {
       });
 
       if (!initResponse.ok) {
-        throw new Error(`Initialize failed: ${initResponse.status} ${initResponse.statusText}`);
+        throw new Error(
+          `Initialize failed: ${initResponse.status} ${initResponse.statusText}`
+        );
       }
 
       const initResult = await initResponse.json();
@@ -136,49 +149,58 @@ export default function Home() {
 
       // Step 2: List available resources
       const resourcesResponse = await fetch(mcpServerUrl, {
-        method: 'POST',
-        mode: 'cors',
+        method: "POST",
+        mode: "cors",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json, text/event-stream',
+          "Content-Type": "application/json",
+          Accept: "application/json, text/event-stream",
         },
         body: JSON.stringify({
-          jsonrpc: '2.0',
-          method: 'resources/list',
+          jsonrpc: "2.0",
+          method: "resources/list",
           params: {},
           id: 2,
         }),
       });
 
       if (!resourcesResponse.ok) {
-        throw new Error(`Resources list failed: ${resourcesResponse.status} ${resourcesResponse.statusText}`);
+        throw new Error(
+          `Resources list failed: ${resourcesResponse.status} ${resourcesResponse.statusText}`
+        );
       }
 
       const resourcesResult = await resourcesResponse.json();
 
       if (resourcesResult.error) {
-        throw new Error(`Resources list error: ${resourcesResult.error.message}`);
+        throw new Error(
+          `Resources list error: ${resourcesResult.error.message}`
+        );
       }
 
       // Step 3: Find the Carousel resource
       const resources = resourcesResult.result?.resources || [];
-      const carouselResource = resources.find((r: { name: string; uri: string }) => r.name === "Carousel");
-      
+      const carouselResource = resources.find(
+        (r: { name: string; uri: string }) => r.name === "Carousel"
+      );
+
       if (!carouselResource) {
-        throw new Error("Carousel resource not found. Available resources: " + resources.map((r: { name: string }) => r.name).join(", "));
+        throw new Error(
+          "Carousel resource not found. Available resources: " +
+            resources.map((r: { name: string }) => r.name).join(", ")
+        );
       }
 
       // Step 4: Read the Carousel resource
       const readResponse = await fetch(mcpServerUrl, {
-        method: 'POST',
-        mode: 'cors',
+        method: "POST",
+        mode: "cors",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json, text/event-stream',
+          "Content-Type": "application/json",
+          Accept: "application/json, text/event-stream",
         },
         body: JSON.stringify({
-          jsonrpc: '2.0',
-          method: 'resources/read',
+          jsonrpc: "2.0",
+          method: "resources/read",
           params: {
             uri: carouselResource.uri,
           },
@@ -187,7 +209,9 @@ export default function Home() {
       });
 
       if (!readResponse.ok) {
-        throw new Error(`Resource read failed: ${readResponse.status} ${readResponse.statusText}`);
+        throw new Error(
+          `Resource read failed: ${readResponse.status} ${readResponse.statusText}`
+        );
       }
 
       const readResult = await readResponse.json();
@@ -203,7 +227,7 @@ export default function Home() {
       const contents = readResult.result?.contents || [];
       let dataText = "";
       let iframeBodyContent = "";
-      
+
       if (contents.length > 0) {
         const content = contents[0];
         // For dataText (metrics), handle different content types
@@ -212,7 +236,7 @@ export default function Home() {
         } else {
           dataText = JSON.stringify(content, null, 2);
         }
-        
+
         // For iframe, ALWAYS use just the text property if it exists
         iframeBodyContent = content.text || "No text content available";
       }
@@ -220,10 +244,10 @@ export default function Home() {
       setCarouselData(dataText);
       setCharacterCount(dataText.length);
       setLoadingTime(loadTime);
-      
+
       // Update iframe content via postMessage
       updateIframeContent(iframeBodyContent);
-      
+
       // Set the toolOutput global (will be sent when iframe is ready)
       setIframeGlobals({
         toolOutput: {
@@ -233,14 +257,15 @@ export default function Home() {
             characterCount: dataText.length,
             loadingTime: loadTime,
             timestamp: new Date().toISOString(),
-            resourceUri: carouselResource?.uri
-          }
-        }
+            resourceUri: carouselResource?.uri,
+          },
+        },
       });
-      
     } catch (err) {
       console.error("MCP Error:", err);
-      setError(`Failed to query MCP server: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setError(
+        `Failed to query MCP server: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -261,25 +286,30 @@ export default function Home() {
           </div>
           <div className="max-w-md mx-auto space-y-4">
             <div>
-              <label htmlFor="mcp-url" className="block text-sm font-medium mb-2">
+              <label
+                htmlFor="mcp-url"
+                className="block text-sm font-medium mb-2"
+              >
                 MCP Server URL
               </label>
               <input
                 id="mcp-url"
                 type="url"
                 value={mcpServerUrl}
-                onChange={(e) => setMcpServerUrl(e.target.value)}
+                onChange={e => setMcpServerUrl(e.target.value)}
                 placeholder="Enter MCP server URL..."
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground"
               />
             </div>
-            
+
             <button
               onClick={queryCarouselResource}
               disabled={isLoading || !mcpServerUrl}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-colors"
             >
-              {isLoading ? 'Querying Carousel Resource...' : 'Query Carousel Resource'}
+              {isLoading
+                ? "Querying Carousel Resource..."
+                : "Query Carousel Resource"}
             </button>
 
             {error && (
@@ -287,12 +317,14 @@ export default function Home() {
                 {error}
               </div>
             )}
-
           </div>
         </div>
 
         {/* Centered iframe */}
-        <div className="flex justify-center items-start" style={{ paddingTop: "36px" }}>
+        <div
+          className="flex justify-center items-start"
+          style={{ paddingTop: "36px" }}
+        >
           <iframe
             ref={iframeRef}
             src="/iframe.html"
