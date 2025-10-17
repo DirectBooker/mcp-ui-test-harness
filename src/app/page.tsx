@@ -17,6 +17,10 @@ export default function Home() {
     string,
     unknown
   > | null>(null);
+  const [resources, setResources] = useState<
+    Array<{ name: string; uri: string }>
+  >([]);
+  const [selectedResourceName, setSelectedResourceName] = useState<string>("");
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Set up message listener for iframe ready signals
@@ -99,7 +103,7 @@ export default function Home() {
     }
   };
 
-  const queryCarouselResource = async () => {
+  const listResources = async () => {
     if (!mcpServerUrl) {
       setError("Please enter a MCP server URL");
       return;
@@ -107,10 +111,9 @@ export default function Home() {
 
     setIsLoading(true);
     setError("");
-    const startTime = Date.now();
 
     try {
-      // Step 1: Initialize MCP connection
+      // Initialize MCP connection
       const initResponse = await fetch(mcpServerUrl, {
         method: "POST",
         mode: "cors",
@@ -142,12 +145,11 @@ export default function Home() {
       }
 
       const initResult = await initResponse.json();
-
       if (initResult.error) {
         throw new Error(`Initialize error: ${initResult.error.message}`);
       }
 
-      // Step 2: List available resources
+      // List available resources
       const resourcesResponse = await fetch(mcpServerUrl, {
         method: "POST",
         mode: "cors",
@@ -170,27 +172,92 @@ export default function Home() {
       }
 
       const resourcesResult = await resourcesResponse.json();
-
       if (resourcesResult.error) {
         throw new Error(
           `Resources list error: ${resourcesResult.error.message}`
         );
       }
 
-      // Step 3: Find the Carousel resource
-      const resources = resourcesResult.result?.resources || [];
-      const carouselResource = resources.find(
-        (r: { name: string; uri: string }) => r.name === "Carousel"
-      );
+      const listed = resourcesResult.result?.resources || [];
+      if (!Array.isArray(listed) || listed.length === 0) {
+        throw new Error("No resources returned by the MCP server");
+      }
 
-      if (!carouselResource) {
+      setResources(listed);
+
+      // Default selection: prefer "Carousel" if present, else first item
+      const defaultSel =
+        listed.find((r: { name: string }) => r.name === "Carousel")?.name ||
+        listed[0].name;
+      setSelectedResourceName(defaultSel);
+    } catch (err) {
+      console.error("MCP Error:", err);
+      setError(
+        `Failed to list resources: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const querySelectedResource = async () => {
+    if (!mcpServerUrl) {
+      setError("Please enter a MCP server URL");
+      return;
+    }
+    if (!selectedResourceName) {
+      setError("Please select a resource (list resources first)");
+      return;
+    }
+
+    const selected = resources.find(r => r.name === selectedResourceName);
+    if (!selected) {
+      setError("Selected resource not found. Please list resources again.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+    const startTime = Date.now();
+
+    try {
+      // Initialize MCP connection (fresh session for robustness)
+      const initResponse = await fetch(mcpServerUrl, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text/event-stream",
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          method: "initialize",
+          params: {
+            protocolVersion: "2024-11-05",
+            capabilities: {
+              resources: {},
+            },
+            clientInfo: {
+              name: "mcp-harness-client",
+              version: "1.0.0",
+            },
+          },
+          id: 1,
+        }),
+      });
+
+      if (!initResponse.ok) {
         throw new Error(
-          "Carousel resource not found. Available resources: " +
-            resources.map((r: { name: string }) => r.name).join(", ")
+          `Initialize failed: ${initResponse.status} ${initResponse.statusText}`
         );
       }
 
-      // Step 4: Read the Carousel resource
+      const initResult = await initResponse.json();
+      if (initResult.error) {
+        throw new Error(`Initialize error: ${initResult.error.message}`);
+      }
+
+      // Read the selected resource
       const readResponse = await fetch(mcpServerUrl, {
         method: "POST",
         mode: "cors",
@@ -202,7 +269,7 @@ export default function Home() {
           jsonrpc: "2.0",
           method: "resources/read",
           params: {
-            uri: carouselResource.uri,
+            uri: selected.uri,
           },
           id: 3,
         }),
@@ -215,7 +282,6 @@ export default function Home() {
       }
 
       const readResult = await readResponse.json();
-
       if (readResult.error) {
         throw new Error(`Resource read error: ${readResult.error.message}`);
       }
@@ -223,21 +289,17 @@ export default function Home() {
       const endTime = Date.now();
       const loadTime = endTime - startTime;
 
-      // Extract the content from the response
       const contents = readResult.result?.contents || [];
       let dataText = "";
       let iframeBodyContent = "";
 
       if (contents.length > 0) {
         const content = contents[0];
-        // For dataText (metrics), handle different content types
         if (content.type === "text") {
           dataText = content.text || "";
         } else {
           dataText = JSON.stringify(content, null, 2);
         }
-
-        // For iframe, ALWAYS use just the text property if it exists
         iframeBodyContent = content.text || "No text content available";
       }
 
@@ -245,19 +307,18 @@ export default function Home() {
       setCharacterCount(dataText.length);
       setLoadingTime(loadTime);
 
-      // Update iframe content via postMessage
       updateIframeContent(iframeBodyContent);
 
-      // Set the toolOutput global (will be sent when iframe is ready)
       setIframeGlobals({
         toolOutput: {
-          carouselContent: iframeBodyContent,
+          resourceContent: iframeBodyContent,
           hotels: MIDDLE_EARTH_HOTELS,
           metadata: {
             characterCount: dataText.length,
             loadingTime: loadTime,
             timestamp: new Date().toISOString(),
-            resourceUri: carouselResource?.uri,
+            resourceUri: selected.uri,
+            resourceName: selected.name,
           },
         },
       });
@@ -292,25 +353,134 @@ export default function Home() {
               >
                 MCP Server URL
               </label>
-              <input
-                id="mcp-url"
-                type="url"
-                value={mcpServerUrl}
-                onChange={e => setMcpServerUrl(e.target.value)}
-                placeholder="Enter MCP server URL..."
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground"
-              />
+              <div className="flex gap-2">
+                <input
+                  id="mcp-url"
+                  type="url"
+                  value={mcpServerUrl}
+                  onChange={e => setMcpServerUrl(e.target.value)}
+                  placeholder="Enter MCP server URL..."
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground"
+                />
+                <button
+                  onClick={listResources}
+                  disabled={isLoading || !mcpServerUrl}
+                  aria-label={
+                    isLoading ? "Fetching resources" : "List resources"
+                  }
+                  title={isLoading ? "Fetching resources" : "List resources"}
+                  className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-3 rounded-md transition-colors"
+                >
+                  {isLoading ? (
+                    <svg
+                      className="h-5 w-5 animate-spin"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      {/* Fat up arrow */}
+                      <path d="M4 12l8-8 8 8h-5v8h-6v-8H4z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
 
-            <button
-              onClick={queryCarouselResource}
-              disabled={isLoading || !mcpServerUrl}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-colors"
-            >
-              {isLoading
-                ? "Querying Carousel Resource..."
-                : "Query Carousel Resource"}
-            </button>
+            <div className="space-y-3">
+              {resources.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="resource-select"
+                    className="text-sm font-medium"
+                  >
+                    Resource
+                  </label>
+                  <select
+                    id="resource-select"
+                    value={selectedResourceName}
+                    onChange={e => setSelectedResourceName(e.target.value)}
+                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    {resources.map(r => (
+                      <option key={r.uri} value={r.name}>
+                        {r.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={querySelectedResource}
+                    disabled={isLoading || !selectedResourceName}
+                    aria-label={
+                      isLoading
+                        ? "Reading selected resource"
+                        : "Run action on selected resource"
+                    }
+                    title={
+                      isLoading
+                        ? "Reading selected resource"
+                        : "Run action on selected resource"
+                    }
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-3 rounded-md transition-colors"
+                  >
+                    {isLoading ? (
+                      <svg
+                        className="h-5 w-5 animate-spin"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="h-5 w-5"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        {/* Action icon: play in circle */}
+                        <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-2.5 5.8l7 4.2-7 4.2V7.8z" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
 
             {error && (
               <div className="p-3 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 rounded-md text-red-700 dark:text-red-300 text-sm">
