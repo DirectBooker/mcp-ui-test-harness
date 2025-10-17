@@ -1,103 +1,254 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [mcpServerUrl, setMcpServerUrl] = useState("http://localhost:3000/mcp");
+  const [isLoading, setIsLoading] = useState(false);
+  const [carouselData, setCarouselData] = useState("");
+  const [characterCount, setCharacterCount] = useState(0);
+  const [loadingTime, setLoadingTime] = useState(0);
+  const [error, setError] = useState("");
+  const [iframeContent, setIframeContent] = useState("<html lang='en-US' data-theme='dark' class='dark' style='--safe-area-inset-top: 0px; --safe-area-inset-bottom: 0px; --safe-area-inset-left: 0px; --safe-area-inset-right: 0px;'><head><style>html,body,#root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}html,body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,Arial,sans-serif!important}button,input,textarea,select{font-family:inherit}</style></head><body></body></html>");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const queryCarouselResource = async () => {
+    if (!mcpServerUrl) {
+      setError("Please enter a MCP server URL");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+    const startTime = Date.now();
+
+    try {
+      console.log("Attempting to connect to MCP server:", mcpServerUrl);
+      
+      // Step 1: Initialize MCP connection
+      console.log("Sending MCP initialize request...");
+      const initResponse = await fetch(mcpServerUrl, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json, text/event-stream',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {
+              resources: {},
+            },
+            clientInfo: {
+              name: 'mcp-harness-client',
+              version: '1.0.0',
+            },
+          },
+          id: 1,
+        }),
+      });
+
+      if (!initResponse.ok) {
+        throw new Error(`Initialize failed: ${initResponse.status} ${initResponse.statusText}`);
+      }
+
+      const initResult = await initResponse.json();
+      console.log("MCP Initialize response:", initResult);
+
+      if (initResult.error) {
+        throw new Error(`Initialize error: ${initResult.error.message}`);
+      }
+
+      // Step 2: List available resources
+      console.log("Listing available resources...");
+      const resourcesResponse = await fetch(mcpServerUrl, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json, text/event-stream',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'resources/list',
+          params: {},
+          id: 2,
+        }),
+      });
+
+      if (!resourcesResponse.ok) {
+        throw new Error(`Resources list failed: ${resourcesResponse.status} ${resourcesResponse.statusText}`);
+      }
+
+      const resourcesResult = await resourcesResponse.json();
+      console.log("Available resources:", resourcesResult);
+
+      if (resourcesResult.error) {
+        throw new Error(`Resources list error: ${resourcesResult.error.message}`);
+      }
+
+      // Step 3: Find the Carousel resource
+      const resources = resourcesResult.result?.resources || [];
+      const carouselResource = resources.find((r: any) => r.name === "Carousel");
+      
+      if (!carouselResource) {
+        throw new Error("Carousel resource not found. Available resources: " + resources.map((r: any) => r.name).join(", "));
+      }
+
+      console.log("Found Carousel resource:", carouselResource);
+
+      // Step 4: Read the Carousel resource
+      console.log("Reading Carousel resource...");
+      const readResponse = await fetch(mcpServerUrl, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json, text/event-stream',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'resources/read',
+          params: {
+            uri: carouselResource.uri,
+          },
+          id: 3,
+        }),
+      });
+
+      if (!readResponse.ok) {
+        throw new Error(`Resource read failed: ${readResponse.status} ${readResponse.statusText}`);
+      }
+
+      const readResult = await readResponse.json();
+      console.log("Carousel resource content:", readResult);
+
+      if (readResult.error) {
+        throw new Error(`Resource read error: ${readResult.error.message}`);
+      }
+
+      const endTime = Date.now();
+      const loadTime = endTime - startTime;
+
+      // Extract the content from the response
+      const contents = readResult.result?.contents || [];
+      let dataText = "";
+      let iframeBodyContent = "";
+      
+      if (contents.length > 0) {
+        const content = contents[0];
+        // For dataText (metrics), handle different content types
+        if (content.type === "text") {
+          dataText = content.text || "";
+        } else {
+          dataText = JSON.stringify(content, null, 2);
+        }
+        
+        // For iframe, ALWAYS use just the text property if it exists
+        iframeBodyContent = content.text || "No text content available";
+      }
+
+      setCarouselData(dataText);
+      setCharacterCount(dataText.length);
+      setLoadingTime(loadTime);
+      
+      // Update iframe content with contents[0].text
+      const updatedHtmlContent = `<html lang='en-US' data-theme='dark' class='dark' style='--safe-area-inset-top: 0px; --safe-area-inset-bottom: 0px; --safe-area-inset-left: 0px; --safe-area-inset-right: 0px;'><head><style>html,body,#root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}html,body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,Arial,sans-serif!important}button,input,textarea,select{font-family:inherit}</style></head><body>${iframeBodyContent}</body></html>`;
+      setIframeContent(updatedHtmlContent);
+      
+      console.log(`Successfully retrieved Carousel resource: ${dataText.length} characters in ${loadTime}ms`);
+      
+    } catch (err) {
+      console.error("MCP Error:", err);
+      setError(`Failed to query MCP server: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background text-foreground p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header with MCP Server URL input and controls */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-4 text-center">MCP Server Interface</h1>
+          <div className="max-w-md mx-auto space-y-4">
+            <div>
+              <label htmlFor="mcp-url" className="block text-sm font-medium mb-2">
+                MCP Server URL
+              </label>
+              <input
+                id="mcp-url"
+                type="url"
+                value={mcpServerUrl}
+                onChange={(e) => setMcpServerUrl(e.target.value)}
+                placeholder="Enter MCP server URL..."
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground"
+              />
+            </div>
+            
+            <button
+              onClick={queryCarouselResource}
+              disabled={isLoading || !mcpServerUrl}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-colors"
+            >
+              {isLoading ? 'Querying Carousel Resource...' : 'Query Carousel Resource'}
+            </button>
+
+            {error && (
+              <div className="p-3 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 rounded-md text-red-700 dark:text-red-300 text-sm">
+                {error}
+              </div>
+            )}
+
+            {(characterCount > 0 || loadingTime > 0) && (
+              <div className="space-y-2">
+                <div>
+                  <label htmlFor="char-count" className="block text-sm font-medium mb-1">
+                    Character Count
+                  </label>
+                  <input
+                    id="char-count"
+                    type="text"
+                    value={characterCount.toLocaleString()}
+                    readOnly
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-800 text-foreground cursor-not-allowed"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="loading-time" className="block text-sm font-medium mb-1">
+                    Loading Time (ms)
+                  </label>
+                  <input
+                    id="loading-time"
+                    type="text"
+                    value={`${loadingTime}ms`}
+                    readOnly
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-800 text-foreground cursor-not-allowed"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        {/* Centered iframe */}
+        <div className="flex justify-center items-start" style={{ paddingTop: "12.5vh" }}>
+          <iframe
+            src={`data:text/html,${encodeURIComponent(iframeContent)}`}
+            className="border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
+            style={{
+              width: "50vw",
+              height: "25vh",
+            }}
+            title="MCP Server Interface"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+      </div>
     </div>
   );
 }
