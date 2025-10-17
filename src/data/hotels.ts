@@ -47,7 +47,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
       "Musical Entertainment",
     ],
     carousel_image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJMG8URg06havsUdWmCIWiDAzyQmTETuOis_Thtvd7cY-1sUHN_udDy1axJMXW",
+      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcReylWwkRwYpWbMXXurmCHGvhVy7MnqYq2SgX66iKkVDUW0DFoy0Bg3FiHTcc4l",
   },
   {
     hotel_id: 3,
@@ -66,7 +66,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
       "Local Music",
     ],
     carousel_image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcROnXJnyjgKtQ4bu_y6kA9Q9-jPDIGf7aIWlPnJeSyjE-1fLM0de9K2YWL3P5f7",
+      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT-0zXhlRXtZukwXYNj9-uw_XRNbVybr1HSZ1_L4edD5MenMkiT48tiXhN2yAIG",
   },
   {
     hotel_id: 4,
@@ -161,7 +161,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
       "Mountain Vistas",
     ],
     carousel_image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT-0zXhlRXtZukwXYNj9-uw_XRNbVybr1HSZ1_L4edD5MenMkiT48tiXhN2yAIG",
+      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcROnXJnyjgKtQ4bu_y6kA9Q9-jPDIGf7aIWlPnJeSyjE-1fLM0de9K2YWL3P5f7",
   },
   {
     hotel_id: 9,
@@ -180,7 +180,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
       "Cozy Interiors",
     ],
     carousel_image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcReylWwkRwYpWbMXXurmCHGvhVy7MnqYq2SgX66iKkVDUW0DFoy0Bg3FiHTcc4l",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJMG8URg06havsUdWmCIWiDAzyQmTETuOis_Thtvd7cY-1sUHN_udDy1axJMXW",
   },
   {
     hotel_id: 10,
