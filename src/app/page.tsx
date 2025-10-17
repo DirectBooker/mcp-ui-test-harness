@@ -21,6 +21,7 @@ export interface Hotel {
 export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   {
     hotel_id: 1,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137721",
     property_token: "token_1",
     name: "The Prancing Pony",
     price: "45 silver pieces",
@@ -31,6 +32,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 2,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137722",
     property_token: "token_2",
     name: "Rivendell Guest Quarters",
     price: "150 mithril coins",
@@ -41,6 +43,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 3,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137723",
     property_token: "token_3",
     name: "The Green Dragon Inn",
     price: "25 copper pennies",
@@ -51,6 +54,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 4,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137724",
     property_token: "token_4",
     name: "Minas Tirith Royal Suites",
     price: "200 gold pieces",
@@ -61,6 +65,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 5,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137725",
     property_token: "token_5",
     name: "Edoras Meadhall Lodge",
     price: "80 silver pieces",
@@ -71,6 +76,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 6,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137726",
     property_token: "token_6",
     name: "Lothlórien Treehouses",
     price: "120 silver pieces",
@@ -81,6 +87,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 7,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137727",
     property_token: "token_7",
     name: "The Forsaken Inn",
     price: "30 silver pieces",
@@ -91,6 +98,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 8,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137728",
     property_token: "token_8",
     name: "Lake-town Floating Hotel",
     price: "60 silver pieces",
@@ -101,6 +109,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 9,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137729",
     property_token: "token_9",
     name: "Bag End Bed & Breakfast",
     price: "40 silver pieces",
@@ -111,6 +120,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 10,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137730",
     property_token: "token_10",
     name: "Helm's Deep Fortress Stay",
     price: "90 silver pieces",
@@ -121,6 +131,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 11,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137731",
     property_token: "token_11",
     name: "The Ivy Bush",
     price: "35 silver pieces",
@@ -131,6 +142,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 12,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137732",
     property_token: "token_12",
     name: "Isengard Tower Suites",
     price: "110 silver pieces",
@@ -141,6 +153,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 13,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137733",
     property_token: "token_13",
     name: "Fangorn Forest Retreat",
     price: "75 silver pieces",
@@ -151,6 +164,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 14,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137734",
     property_token: "token_14",
     name: "Dale Merchant Inn",
     price: "65 silver pieces",
@@ -161,6 +175,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 15,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137735",
     property_token: "token_15",
     name: "Weathertop Watchtower Lodge",
     price: "50 silver pieces",
@@ -171,6 +186,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 16,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137736",
     property_token: "token_16",
     name: "Thranduil's Palace Guest Wing",
     price: "180 silver pieces",
@@ -181,6 +197,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 17,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137737",
     property_token: "token_17",
     name: "The Golden Perch",
     price: "55 silver pieces",
@@ -191,6 +208,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 18,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137738",
     property_token: "token_18",
     name: "Dunharrow Mountain Lodge",
     price: "70 silver pieces",
@@ -201,6 +219,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 19,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137739",
     property_token: "token_19",
     name: "Shire Countryside Inn",
     price: "42 silver pieces",
@@ -211,6 +230,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 20,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137740",
     property_token: "token_20",
     name: "Dol Amroth Seaside Resort",
     price: "130 silver pieces",
@@ -221,6 +241,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 21,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137741",
     property_token: "token_21",
     name: "The Old Forest House",
     price: "45 silver pieces",
@@ -231,6 +252,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 22,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137742",
     property_token: "token_22",
     name: "Cirith Ungol Watchtower",
     price: "25 silver pieces",
@@ -241,6 +263,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 23,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137743",
     property_token: "token_23",
     name: "Rohan Royal Stables Inn",
     price: "85 silver pieces",
@@ -251,6 +274,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 24,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137744",
     property_token: "token_24",
     name: "Hobbiton Hill House",
     price: "48 silver pieces",
@@ -261,6 +285,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 25,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137745",
     property_token: "token_25",
     name: "Osgiliath Bridge Inn",
     price: "60 silver pieces",
@@ -271,6 +296,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 26,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137746",
     property_token: "token_26",
     name: "Grey Havens Departure Lounge",
     price: "95 silver pieces",
@@ -281,6 +307,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 27,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137747",
     property_token: "token_27",
     name: "Erebor Royal Chambers",
     price: "250 gold pieces",
@@ -291,6 +318,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 28,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137748",
     property_token: "token_28",
     name: "Bucklebury Ferry House",
     price: "38 silver pieces",
@@ -301,6 +329,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 29,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137749",
     property_token: "token_29",
     name: "Crickhollow Country Manor",
     price: "75 silver pieces",
@@ -311,6 +340,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
   },
   {
     hotel_id: 30,
+    price_link: "https://www.directbooker.com/en-us/hotel-detail/137750",
     property_token: "token_30",
     name: "Tom Bombadil's Forest Cottage",
     price: "20 silver pieces",
@@ -567,7 +597,14 @@ export default function Home() {
       <div className="max-w-4xl mx-auto">
         {/* Header with MCP Server URL input and controls */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4 text-center">MCP Server Interface</h1>
+          <div className="flex justify-between items-start mb-4">
+            <h1 className="text-3xl font-bold">MCP-UI Test Harness</h1>
+            {loadingTime > 0 && (
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Resource loading time: {loadingTime}ms
+              </div>
+            )}
+          </div>
           <div className="max-w-md mx-auto space-y-4">
             <div>
               <label htmlFor="mcp-url" className="block text-sm font-medium mb-2">
@@ -597,46 +634,18 @@ export default function Home() {
               </div>
             )}
 
-            {(characterCount > 0 || loadingTime > 0) && (
-              <div className="space-y-2">
-                <div>
-                  <label htmlFor="char-count" className="block text-sm font-medium mb-1">
-                    Character Count
-                  </label>
-                  <input
-                    id="char-count"
-                    type="text"
-                    value={characterCount.toLocaleString()}
-                    readOnly
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-800 text-foreground cursor-not-allowed"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="loading-time" className="block text-sm font-medium mb-1">
-                    Loading Time (ms)
-                  </label>
-                  <input
-                    id="loading-time"
-                    type="text"
-                    value={`${loadingTime}ms`}
-                    readOnly
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-800 text-foreground cursor-not-allowed"
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
         {/* Centered iframe */}
-        <div className="flex justify-center items-start" style={{ paddingTop: "12.5vh" }}>
+        <div className="flex justify-center items-start" style={{ paddingTop: "36px" }}>
           <iframe
             ref={iframeRef}
             src="/iframe.html"
             className="border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
             style={{
               width: "50vw",
-              height: "25vh",
+              height: "550px",
             }}
             title="MCP Server Interface"
           />
