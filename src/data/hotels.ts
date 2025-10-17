@@ -8,6 +8,8 @@ export interface Hotel {
   rating: number;
   amenities: string[];
   carousel_image?: string | undefined;
+  latitude?: number | undefined;
+  longitude?: number | undefined;
 }
 
 export const MIDDLE_EARTH_HOTELS: Hotel[] = [
@@ -29,6 +31,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTLvFOqd6OUI_Q7yapFr7VECBSJgH2nXXI6J1cOO_buHJKv97mkKQQe5qFgZs6X",
+    latitude: 48.8566,
+    longitude: 2.3522,
   },
   {
     hotel_id: 2,
@@ -48,6 +52,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcReylWwkRwYpWbMXXurmCHGvhVy7MnqYq2SgX66iKkVDUW0DFoy0Bg3FiHTcc4l",
+    latitude: 48.8606,
+    longitude: 2.3376,
   },
   {
     hotel_id: 3,
@@ -67,6 +73,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT-0zXhlRXtZukwXYNj9-uw_XRNbVybr1HSZ1_L4edD5MenMkiT48tiXhN2yAIG",
+    latitude: 48.8529,
+    longitude: 2.2945,
   },
   {
     hotel_id: 4,
@@ -86,6 +94,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRo_YXs0-pGUfGNZADrhZ_naXrxwiIoj7AYbgIIX0TOoK3ZeklVR7Ym_xMh9LCj",
+    latitude: 48.8738,
+    longitude: 2.295,
   },
   {
     hotel_id: 5,
@@ -105,6 +115,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSjsdEzs8bcf0Mt6CVJ6s0GIPBhtFcEk5O5s0GMM4Pt1rpVCFAwF4ViOsaq1l88",
+    latitude: 48.8767,
+    longitude: 2.3073,
   },
   {
     hotel_id: 6,
@@ -124,6 +136,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEN8cRb3fSKz3frQo7-FDp-RgVs-EPOj_MqO330fnO34P5W0XMwDoTVvgJk_rY",
+    latitude: 48.8648,
+    longitude: 2.314,
   },
   {
     hotel_id: 7,
@@ -143,6 +157,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSLx6D5WwXJ2m3Sn6cDi58mOJ93qC5cASLLGfDkHFgkQhFCY_lW3DOh9zTJajB8",
+    latitude: 48.872,
+    longitude: 2.3667,
   },
   {
     hotel_id: 8,
@@ -162,6 +178,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcROnXJnyjgKtQ4bu_y6kA9Q9-jPDIGf7aIWlPnJeSyjE-1fLM0de9K2YWL3P5f7",
+    latitude: 48.853,
+    longitude: 2.3499,
   },
   {
     hotel_id: 9,
@@ -181,6 +199,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJMG8URg06havsUdWmCIWiDAzyQmTETuOis_Thtvd7cY-1sUHN_udDy1axJMXW",
+    latitude: 48.857,
+    longitude: 2.3626,
   },
   {
     hotel_id: 10,
@@ -200,6 +220,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQSwf0pXqQ7M4mzj8M_OD56912l9RvPWJVSKd6HZeiYbD0ZiQ7yLbGGYPDz2k-k",
+    latitude: 48.8422,
+    longitude: 2.3211,
   },
   {
     hotel_id: 11,
@@ -219,6 +241,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTliScaHbCSrB7O_ee6ZlQxEWB5tTVCyjRT1lsmEX1xMxew1byUKC1oaQG0lcbP",
+    latitude: 48.8706,
+    longitude: 2.332,
   },
   {
     hotel_id: 12,
@@ -238,6 +262,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTfDrwqgbXxVbeC9qukeM08cO0RLC7kqp0Kf-dTtMivMkQIGVh07AmcGVHolTIA",
+    latitude: 48.8926,
+    longitude: 2.2369,
   },
   {
     hotel_id: 13,
@@ -257,6 +283,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQEYwEnh89p3u4HNhMK0h4cnbticzTVRrdFkNcVDrgGWZHv-Ge0CByWNIEgwgIx",
+    latitude: 48.8809,
+    longitude: 2.3819,
   },
   {
     hotel_id: 14,
@@ -276,6 +304,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR4PKneTtACabYa1fhFE9q1QOhW3aEJnw4s_bcAB_F9-aQP4qyxQkHoBphq24Do",
+    latitude: 48.8674,
+    longitude: 2.3633,
   },
   {
     hotel_id: 15,
@@ -295,6 +325,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxW6NgiTQ0e1-eKuNk1h1wF3WVtdOZnb9eU1r9Ilad7Su2ZQVvEDkyivOnQyEe",
+    latitude: 48.8723,
+    longitude: 2.376,
   },
   {
     hotel_id: 16,
@@ -314,6 +346,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRwWTcHJOu1-vkxe-nmtOpZZKToBMWeDRtsayYQO9QbRbU3tly7Z340XhBu-j",
+    latitude: 48.8625,
+    longitude: 2.2871,
   },
   {
     hotel_id: 17,
@@ -333,6 +367,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRMzZ4yTKvFqRuPm3w44ISV5EYM6JbPWkoGP9P1B8L__JJmPt0P-TH5RaLehDDa",
+    latitude: 48.8698,
+    longitude: 2.3073,
   },
   {
     hotel_id: 18,
@@ -352,6 +388,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT-S8fQ5ai1F-M-XYb4yK5gbEA1MYSgvH2skwrOsKbUPDcoqHMKlYlfI8lQe7zP",
+    latitude: 48.8462,
+    longitude: 2.3458,
   },
   {
     hotel_id: 19,
@@ -371,6 +409,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSQMtbxL7eKw2FUFo2vP3mKg0Om1h5MhW6e-FgnIZMkgjNyTEVm_Bvc9utni4yb",
+    latitude: 48.879,
+    longitude: 2.3093,
   },
   {
     hotel_id: 20,
@@ -390,6 +430,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQnUQw9QwPY2ohUNdTCZjQrGBuC1kbyizC2MXO17ZWKioGR-W64ZPSZDfctYG8q",
+    latitude: 48.8566,
+    longitude: 2.3126,
   },
   {
     hotel_id: 21,
@@ -409,6 +451,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRi4kGI8QSmaFUcyh_17N1Dv33o-7892Z_n0iTC00b_AoihyhpkeY_c0P82L17m",
+    latitude: 48.8625,
+    longitude: 2.3469,
   },
   {
     hotel_id: 22,
@@ -428,6 +472,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSteiXrlvrNzdugxBt3ARMoFboctNAXJkVWEoy1BE-8qalO_7nvJAJ7crk5AB42",
+    latitude: 48.8809,
+    longitude: 2.3553,
   },
   {
     hotel_id: 23,
@@ -447,6 +493,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLhtS-fIFoT6y6wR4CRVt6F1eq4hX0HxMX4s2WihArZM7wNHZMo0i4xJI2xSqF",
+    latitude: 48.8443,
+    longitude: 2.373,
   },
   {
     hotel_id: 24,
@@ -466,6 +514,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTLvFOqd6OUI_Q7yapFr7VECBSJgH2nXXI6J1cOO_buHJKv97mkKQQe5qFgZs6X",
+    latitude: 48.82,
+    longitude: 2.3372,
   },
   {
     hotel_id: 25,
@@ -485,6 +535,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSdw_O9-hiW_wPf0NujGMK4s2gJBfzKAq72jXV0lXSLOw8rcsmHi-EYB5uIEjDN",
+    latitude: 48.8335,
+    longitude: 2.386,
   },
   {
     hotel_id: 26,
@@ -504,6 +556,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSjzgzBMdpojWLb-TO_DE5UBq1VKVx2BmYyftioNcE2l_MEALvPNwybKoY3U11r",
+    latitude: 48.8635,
+    longitude: 2.2499,
   },
   {
     hotel_id: 27,
@@ -523,6 +577,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcReylWwkRwYpWbMXXurmCHGvhVy7MnqYq2SgX66iKkVDUW0DFoy0Bg3FiHTcc4l",
+    latitude: 48.8867,
+    longitude: 2.3431,
   },
   {
     hotel_id: 28,
@@ -542,6 +598,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBDi8RzLbVx2ixMpg5dDysguoIokPYH5xiyStTrH6Pdwq_UkiGlh18JE83Vzqb",
+    latitude: 48.8947,
+    longitude: 2.387,
   },
   {
     hotel_id: 29,
@@ -561,6 +619,8 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSoLuQKJI_VWnPEnCBMy4PpSrbLovWFKI5mR8KwS5vFpNVGGLRmx8p5V1W19jht",
+    latitude: 48.853,
+    longitude: 2.333,
   },
   {
     hotel_id: 30,
@@ -580,5 +640,7 @@ export const MIDDLE_EARTH_HOTELS: Hotel[] = [
     ],
     carousel_image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJc8j5HJ-JQMYR_-8_PmnWWdJrcF-OSW9kvwMZBj50Vjlt7l8enllHn96Zz5bl",
+    latitude: 48.853,
+    longitude: 2.369,
   },
 ];
